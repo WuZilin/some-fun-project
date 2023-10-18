@@ -1,0 +1,39 @@
+<template>
+    <div id="gameArea">
+        <p>Score: {{score}}</p>
+    </div>
+</template>
+
+<script lang="ts">
+import {Component} from 'san';
+
+export default class GameArea extends Component {
+    initData() {
+        return {
+            score: 0,
+        }
+    }
+        
+}
+</script>
+
+<style lang="less">
+    #gameArea {
+        width: 60%;
+        height: 80vh;
+        background-color: white;
+        border-radius: 10px;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #gameArea p {
+        font-size: 20px;
+        color: skyblue;
+        position: relative;
+        left: 88%;
+        top: 10px;
+    }
+</style>

@@ -1,0 +1,47 @@
+<template>
+    <div id="rule">
+        <h2>规则</h2>
+        <p>用你的右键和左键移动球拍,是球反弹和打破砖块。</p>
+        <p>如果你漏了球,则本轮游戏结束</p>
+        <button id="ruleClose" on-click="closeRule">close</button>
+    </div>
+</template>
+
+<script lang="ts">
+    import {Component} from 'san';
+
+    export default class Rule extends Component {
+        closeRule() {
+            this.dispatch('ui:closeRule');
+        }
+    }
+</script>
+
+<style lang="less">
+    #rule {
+        width: 20%;
+        height: 100vh;
+        background-color: rgb(51 51 51);
+        color: white;
+        padding: 20px;
+        z-index: 2;
+        position: absolute;
+        left: 0;
+        margin-top: -50px;
+    }
+
+    #rule p {
+        margin: 16px;
+    }
+
+    #ruleClose {
+        width: 60px;
+        height: 30px;
+        background-color: black;
+        border-radius: 5px;
+        color: white;
+        position: absolute;
+        top: 200px;
+        font-size: 20px;
+    }
+</style>
