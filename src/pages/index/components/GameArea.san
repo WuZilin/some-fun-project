@@ -1,19 +1,271 @@
 <template>
     <div id="gameArea">
         <p>Score: {{score}}</p>
+        <canvas id="battleField" width="760" height="530"></cnavas>
     </div>
 </template>
 
 <script lang="ts">
 import {Component} from 'san';
 
+// 先试着用canvas画布实现
+class SmallBox {
+    width: number;
+    height: number;
+    exist: boolean;
+    y: number;
+    x: number;
+    constructor(y: number, x: number) {
+        this.width = 70;
+        this.height = 20;
+        this.exist = true;
+        this.y = y;
+        this.x = x;
+    }
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = "skyblue";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+
+let smallBoxes: smallBoxes[] = [];
+
+function firstLoad() {
+    for(let i = 0; i < 9; ++i) {
+        for (let j = 0; j < 5; ++j) {
+            smallBoxes.push(new SmallBox(30 * j, 20 + 80 * i));
+        }
+    }
+}
+firstLoad();
+function reset(smallBoxes: SmallBox[], ball: Ball) {
+    for (let i = 0; i < smallBoxes.length; ++i) {
+        smallBoxes[i].exist = true;
+    }
+    ball.x = 400;
+    ball.y = 400;
+    ball.velY = -3;
+}
+
+class Ball {
+    x: number;
+    y: number;
+    velX: number;
+    velY: number;
+    constructor(x: number, y: number, velX: number, velY: number) {
+        this.x = x;
+        this.y = y;
+        this.velX = velX;
+        this.velY = velY;
+        this.radius = 10;
+    }
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.beginPath();
+        ctx.fillStyle = "skyblue";
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+let ball: Ball = new Ball(400, 400, 3, -3); 
+
+class Baffle {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    constructor() {
+        this.width = 80;
+        this.height = 10;
+        this.x = 400;
+        this.y = 510;
+    }
+    draw(ctx: CanvasRenderingContext2D) {
+        ctx.fillStyle = 'skyblue';
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+let baffle: Baffle = new Baffle();
+let arrowKey: string = '';
+window.addEventListener('keydown', (e) => {
+    arrowKey = e.key;
+});
+
+window.addEventListener('keyup', () => {
+    arrowKey = '';
+});
+
+
+let animation: any = null;
 export default class GameArea extends Component {
     initData() {
         return {
             score: 0,
+            smallBoxes: smallBoxes,
+            ball: ball,
+            baffle: baffle
         }
     }
+
+    // 小球移动函数
+    moveBall() {
+        let ball = this.data.get('ball');
+         // 如果小球已经到达边缘，则反转它的速度
+        if (ball.x + ball.radius >= this.data.get('width')) {
+            ball.velX = -ball.velX;
+        }
+        if (ball.x - ball.radius <= 0) {
+            ball.velX = -ball.velX;
+        }
+        if (ball.y + ball.radius >= this.data.get('height')) {
+            this.dispatch('game:over');
+            alert('游戏结束');
+            animation = null;
+        }
+        if (ball.y - ball.radius <= 0) {
+            ball.velY = -ball.velY;
+        }
+        ball.x += ball.velX;
+        ball.y += ball.velY;
+    }
+
+    // 挡板移动函数
+    moveBaffle() {
+        let baffle = this.data.get('baffle');
+        if (arrowKey === 'ArrowLeft') {
+            baffle.x = baffle.x - 10 < 0 ? 0: baffle.x - 10;
+        }
+        if (arrowKey === 'ArrowRight') {
+            baffle.x = baffle.x + 10 + baffle.width > this.data.get('width') 
+            ? this.data.get('width') - baffle.width
+            :baffle.x + 10;
+        }
+        if (arrowKey === 'ArrowUp') {
+            baffle.y = baffle.y - 10 < 420 ? 420: baffle.y - 10;
+        }
+        if (arrowKey === 'ArrowDown') {
+            baffle.y = baffle.y + 10 + baffle.height > this.data.get('height')
+            ? this.data.get('height') - baffle.height
+            :baffle.y + 10;
+        }
+
+    }
+
+    // 每一帧画布更新函数
+    updateScreen() {
+        let smallBoxes = this.data.get('smallBoxes');
+        let ball = this.data.get('ball');
+        let baffle = this.data.get('baffle');
+        let ctx = this.data.get('ctx');
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, this.data.get('width'), this.data.get('height'));
+
         
+        ctx.beginPath();
+        ctx.strokeStyle = "skyblue";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([5, 2]);
+        ctx.moveTo(0, 420);
+        ctx.lineTo(this.data.get('width'), 420);
+        ctx.stroke();
+
+        // 每次更新画布，都都从画一次当前依然存在的小box
+        for (let i = 0; i < smallBoxes.length; ++i) {
+            if (smallBoxes[i].exist) {
+                smallBoxes[i].draw(this.data.get('ctx'));
+            }
+        }
+        ball.draw(this.data.get('ctx'));
+        baffle.draw(this.data.get('ctx'));
+    }
+
+    getTypeoOfCollision(circle: Ball, rect: Baffle | SmallBox) {
+        // 左边发生碰撞
+        if (circle.x + circle.radius > rect.x 
+        && circle.x - circle.radius < rect.x 
+        && circle.y > rect.y 
+        && circle.y < rect.y + rect.height) {
+            circle.velX = -circle.velX;
+            rect.exist = false;
+            if (rect instanceof SmallBox) {
+                this.data.set('score', this.data.get('score') + 1);
+            }
+        }
+
+        // 右边发生碰撞
+        if (circle.x - circle.radius < rect.x + rect.width
+        && circle.x + circle.radius > rect.x + rect.width
+        && circle.y > rect.y 
+        && circle.y - circle.radius < rect.y + rect.height) {
+            circle.velX = -circle.velX;
+            rect.exist = false;
+            if (rect instanceof SmallBox) {
+                this.data.set('score', this.data.get('score') + 1);
+            }
+        }
+
+        // 上边发生碰撞
+        if (circle.y + circle.radius > rect.y
+        && circle.y - circle.radius < rect.y
+        && circle.x > rect.x
+        && circle.x + circle.radius < rect.x + rect.width) {
+            circle.velY = -circle.velY;
+            rect.exist = false;
+            if (rect instanceof SmallBox) {
+                this.data.set('score', this.data.get('score') + 1);
+            }
+        } 
+
+        // 下边发生碰撞
+        if (circle.y - circle.radius < rect.y + rect.height 
+        && circle.y + circle.radius > rect.y + rect.height 
+        && circle.x > rect.x 
+        && circle.x + circle.radius < rect.x + rect.width) {
+            circle.velY = -circle.velY;
+            rect.exist = false;
+            if (rect instanceof SmallBox) {
+                this.data.set('score', this.data.get('score') + 1);
+            }
+        }  
+    }
+
+    // 小球碰撞检测函数
+    collisionDetect() {
+        let smallBoxes = this.data.get('smallBoxes');
+        let ball = this.data.get('ball');
+        let baffle = this.data.get('baffle');
+        for (let i = 0; i < smallBoxes.length; ++i) {
+            if (smallBoxes[i].exist) {
+                this.getTypeoOfCollision(ball, smallBoxes[i]);
+            }
+        }
+        this.getTypeoOfCollision(ball, baffle);
+    }
+
+    attached() {
+        let canvas = document.getElementById('battleField');
+        this.data.set('width', canvas.width);
+        this.data.set('height', canvas.height);
+        let ctx = canvas.getContext('2d');
+        this.data.set('ctx', ctx);
+        this.updateScreen();
+        this.watch('isGaming', function() {
+            if (this.data.get('isGaming')) {
+                reset(smallBoxes, ball);
+                this.data.set('score', 0);
+                this.loop();
+            }
+        });
+    }
+
+    loop() {
+        if (this.data.get('isGaming')) {
+            this.moveBall();
+            this.moveBaffle();
+            this.collisionDetect();
+            this.updateScreen();
+            animation = requestAnimationFrame(this.loop.bind(this));
+        }
+    }   
 }
 </script>
 
@@ -30,10 +282,19 @@ export default class GameArea extends Component {
     }
 
     #gameArea p {
+        width: 100px;
         font-size: 20px;
         color: skyblue;
         position: relative;
         left: 88%;
         top: 10px;
+    }
+
+    #battleField {
+        border: skyblue 1px solid;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
     }
 </style>

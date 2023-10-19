@@ -4,7 +4,7 @@
         <button id="startGame" on-click="startGame">开始游戏</button>
         <s-rule s-if="{{isRuleVisible}}"></s-rule>
         <h1 id="bigTitle">Breakout!</h1>
-        <s-gamearea></s-gamearea>
+        <s-gamearea isGaming="{{isGaming}}"></s-gamearea>
     </div>
 </template>
 
@@ -17,6 +17,7 @@ export default class App extends Component {
     initData() {
         return {
             isRuleVisible: false,
+            isGaming: false,
         }
     }
 
@@ -30,12 +31,15 @@ export default class App extends Component {
     }
 
     startGame() {
-
+        this.data.set('isGaming', true);
     }
 
     static messages = {
         'ui:closeRule': function() {
             this.data.set('isRuleVisible', false);
+        },
+        'game:over': function() {
+            this.data.set('isGaming', false);
         }
     }
 
@@ -45,7 +49,7 @@ export default class App extends Component {
 <style lang="less">
     .main {
         height: 100vh;
-        width: 100vw;
+        width: 100%;
         background-color: skyblue;
         position: relative;
         padding-top: 50px;
