@@ -1,0 +1,85 @@
+<template>
+    <div class="main">
+        <button id="checkRule" on-click="showRule">查看规则</button>
+        <button id="startGame" on-click="startGame">开始游戏</button>
+        <s-rule s-if="{{isRuleVisible}}"></s-rule>
+        <h1 id="bigTitle">Breakout!</h1>
+        <s-gamearea isGaming="{{isGaming}}"></s-gamearea>
+    </div>
+</template>
+
+<script lang="ts">
+import {Component} from 'san';
+import Rule from '../components/Rule.san';
+import GameArea from '../components/GameArea.san';
+
+export default class App extends Component {
+    initData() {
+        return {
+            isRuleVisible: false,
+            isGaming: false,
+        }
+    }
+
+    static components = {
+        's-rule': Rule,
+        's-gamearea': GameArea,
+    }
+
+    showRule() {
+        this.data.set('isRuleVisible', true);
+    }
+
+    startGame() {
+        this.data.set('isGaming', true);
+    }
+
+    static messages = {
+        'ui:closeRule': function() {
+            this.data.set('isRuleVisible', false);
+        },
+        'game:over': function() {
+            this.data.set('isGaming', false);
+        }
+    }
+
+}
+</script>
+
+<style lang="less">
+    .main {
+        height: 100vh;
+        width: 100%;
+        background-color: skyblue;
+        position: relative;
+        padding-top: 50px;
+    }
+    
+    .main>button {
+        width: 100px;
+        height: 33px;
+        background-color: black;
+        color: white;
+        border-radius: 10px;
+        position: absolute;
+        left: 40px;
+        z-index: 1;
+    }
+
+    #checkRule {
+        top: 40px;
+    }
+
+    #startGame {
+        top: 90px;
+    }
+
+    #bigTitle {
+        display: block;
+        width: 200px;
+        text-align: center;
+        margin: 0 auto;
+        color: white;
+    }
+
+</style>

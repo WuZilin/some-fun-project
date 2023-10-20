@@ -1,46 +1,40 @@
 <template>
     <div class="main">
-        <button id="checkRule" on-click="showRule">查看规则</button>
-        <button id="startGame" on-click="startGame">开始游戏</button>
-        <s-rule s-if="{{isRuleVisible}}"></s-rule>
-        <h1 id="bigTitle">Breakout!</h1>
-        <s-gamearea isGaming="{{isGaming}}"></s-gamearea>
+        <button id="settingBtn" on-click="showDifficultySetting">难度设置</button>
+        <div id="difficultySetting" style="opacity: {{settingOpacity}}">
+            <div>
+                <lable>Difficulty</label>
+                <select value="{=difficultyLevel=}">
+                    <option value="easy">easy</option>
+                    <option value="normal">normal</option>
+                    <option value="hard">hard</option>
+                </select>
+            </div>
+        </div>
+        <s-gamearea difficultyLevel={{difficultyLevel}}></s-gamearea>
     </div>
 </template>
 
 <script lang="ts">
 import {Component} from 'san';
-import Rule from '../components/Rule.san';
 import GameArea from '../components/GameArea.san';
+
 
 export default class App extends Component {
     initData() {
         return {
-            isRuleVisible: false,
-            isGaming: false,
+            settingOpacity: 1,
+            difficultyLevel: 'easy'
         }
     }
 
     static components = {
-        's-rule': Rule,
         's-gamearea': GameArea,
     }
 
-    showRule() {
-        this.data.set('isRuleVisible', true);
-    }
-
-    startGame() {
-        this.data.set('isGaming', true);
-    }
-
-    static messages = {
-        'ui:closeRule': function() {
-            this.data.set('isRuleVisible', false);
-        },
-        'game:over': function() {
-            this.data.set('isGaming', false);
-        }
+    showDifficultySetting() {
+        let opacity: number = this.data.get('settingOpacity');
+        this.data.set('settingOpacity', opacity === 1 ? 0 : 1);
     }
 
 }
@@ -50,36 +44,39 @@ export default class App extends Component {
     .main {
         height: 100vh;
         width: 100%;
-        background-color: skyblue;
+        background-color: #2d3d50;
         position: relative;
-        padding-top: 50px;
+    }
+
+    #settingBtn {
+        position: absolute;
+        width: 100px;
+        height: 30px;
+        font-size: 18px;
+        bottom: 50px;
+        left: 50px;
+    }
+
+    #difficultySetting {
+        height: 70px;
+        background-color: rgba(0, 0, 0, .3);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 150px;
+    }
+
+    #difficultySetting select {
+        width: 200px;
+        padding: 5px;
+        border-radius: 5px;
+        background-color: #a7c5e3;
+        font-size: 16px;
     }
     
-    .main>button {
-        width: 100px;
-        height: 33px;
-        background-color: black;
-        color: white;
-        border-radius: 10px;
-        position: absolute;
-        left: 40px;
-        z-index: 1;
-    }
-
-    #checkRule {
-        top: 40px;
-    }
-
-    #startGame {
-        top: 90px;
-    }
-
-    #bigTitle {
-        display: block;
-        width: 200px;
-        text-align: center;
-        margin: 0 auto;
+    #difficultySetting lable {
         color: white;
     }
+
 
 </style>
