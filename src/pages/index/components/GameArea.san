@@ -32,7 +32,7 @@ export default class GameArea extends Component {
             difficultyLevel: 'easy',
             targetWord: 'hello',
             wordList: ['hello', 'world', 'goodbye', 'welcome', 'service', 'thank', 'hope', 'important', 'starry', 'lovely', 'interesting'
-            , 'amazing', 'beautiful', 'perfect', 'awesome', 'michishibube', 'young', 'happiness', 'universe', 'star', 'planet', 'moon'
+            , 'amazing', 'beautiful', 'perfect', 'awesome', 'michishirube', 'young', 'happiness', 'universe', 'star', 'planet', 'moon'
             , 'sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'milkway', 'rainbow', 
             'reborn'],
         }
