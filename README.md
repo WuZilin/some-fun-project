@@ -131,3 +131,4 @@ export default {
 * npmrc：不需要修改，注册@baidu registry
 * prettierrc：根据需要修改，格式化插件
 * gitignore：git 忽略
+
