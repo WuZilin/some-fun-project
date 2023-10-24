@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background-color: #6854dc;
+    flex: 2;
+}
+
+.header img {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    top: 6px;
+}
+
+.header h1,
+.header h2 {
+    margin: 20px;
+    color: white;
+}
+
+.header .userArea {
+  margin: 20px;
+}
+
+.userArea img {
+    height: 30px;
+    width: 30px;
+}
+
+.userArea select {
+    background-color: transparent;
+    color: white;
+    border: none;
+}
+
+.header .searchArea {
+    margin-left: auto;
+}
+
+.header .searchArea input {
+    background-color: transparent;
+    border: none;
+    color: white;
+}
+
+.header .searchArea input::placeholder {
+    color: white;
+}
+
+.content {
+    display: flex;
+    flex: 14;
+}
+
+.content .left {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    border-right: 1px black solid;
+    flex: 1;
+}
+
+.content .left .left-top {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    background-color: #eee;
+}
+
+.left-top p:first-child {
+    margin-left: 10px;
+    margin-right: auto;
+}
+
+.left-top p:last-child {
+    margin-right: 10px;
+}
+
+.left-main {
+    display: flex;
+    flex: 1;
+}
+
+.left-main-left {
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+    background-color: #eee;
+}
+
+.left-main-left div{
+    color:  #6854dc;
+    font-size: 14px;
+    height: 86px;
+}
+
+.left-main-left img {
+    height: 50px;
+    width: 50px;
+    margin-left: 14px;
+}
+
+.left-main-left div.active {
+    background-color: white;
+}
+
+.left-main-right {
+    flex: 10;
+    text-align: center;
+    padding-top: 30px;
+}
+
+
+
+.content .right {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 3;
+}
+
+.right-top {
+    display: flex;
+    height: 30px;
+    background-color: #606fc7;
+    color: white;
+    align-items: center;
+}
+
+.right-top div {
+    flex-basis: 80px;
+    text-align: center;
+    line-height: 30px;
+    height: 100%;
+}
+
+.right-top div.active {
+    background-color: white;
+    color: black;
+}
+
+.right-top img {
+    margin-left: auto;
+    margin-right: 20px;
+    height: 20px;
+    width: 20px;
+}
+
+.right-main {
+    padding: 30px;
+    font-size: 22px;
+}
+
+
+.footer {
+    display: flex;
+    background-color: #6854dc;
+    flex: 1;
+    color: white;
+    align-items: center;
+}
+
+.footer div {
+   display: flex;
+   margin-left: 20px;
+   margin-right: 20px;
+}
+
+.footer .export {
+    margin-left: auto;
+}
+
+.footer img {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+}

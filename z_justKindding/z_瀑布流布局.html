@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="masonry">
+        
+            <img src="https://picsum.photos/360/460?radom=1" alt="">
+       
+       
+            <img src="https://picsum.photos/360/520?radom=2" alt="">
+     
+            <img src="https://picsum.photos/360/420?radom=3" alt="">
+       
+ 
+            <img src="https://picsum.photos/360/500?radom=4" alt="">
+  
+  
+            <img src="https://picsum.photos/360/420?radom=5" alt="">
+ 
+   
+            <img src="https://picsum.photos/360/460?radom=6" alt="">
+      
+            <img src="https://picsum.photos/360/480?radom=7" alt="">
+     
+            <img src="https://picsum.photos/360/460?radom=8" alt="">
+        
+            <img src="https://picsum.photos/360/420?radom=9" alt="">
+      
+            <img src="https://picsum.photos/360/500?radom=10" alt="">
+        
+            <img src="https://picsum.photos/360/460?radom=11" alt="">
+   
+            <img src="https://picsum.photos/360/360?radom=12" alt="">
+        
+            <img src="https://picsum.photos/360/420?radom=13" alt="">
+     
+            <img src="https://picsum.photos/360/500?radom=14" alt="">
+        
+            <img src="https://picsum.photos/360/460?radom=15" alt="">
+      
+            <img src="https://picsum.photos/360/360?radom=16" alt="">
+       
+    </div>
+</body>
+</html>
+
+<style>
+body {
+  margin: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.masonry {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 2500px;
+    align-items: center;
+}
+
+.masonry img {
+    margin: 10px;
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    /* flex-grow: 1; */
+}
+
+img::after {
+  position: absolute;
+  display: block;
+  top: 2px;
+  left: 2px;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  background-color: #000;
+  color: #fff;
+  content: counter(count);
+}
+</style>
