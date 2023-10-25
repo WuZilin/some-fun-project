@@ -106,6 +106,10 @@
     height: 86px;
 }
 
+.left-main-left div:hover {
+    cursor: pointer;
+}
+
 .left-main-left img {
     height: 50px;
     width: 50px;
@@ -146,9 +150,14 @@
     height: 100%;
 }
 
+.right-top div:hover {
+    cursor: pointer;
+}
+
 .right-top div.active {
     background-color: white;
     color: black;
+    order: -1;
 }
 
 .right-top img {

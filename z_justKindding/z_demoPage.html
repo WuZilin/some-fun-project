@@ -93,4 +93,20 @@
         </div>
     </div>
 </body>
+<script lang="ts">
+    const aaa = document.querySelectorAll('.left-main-left div');
+    const bbb = document.querySelectorAll('.right-top div');
+    aaa.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            document.querySelector('.left-main-left div.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+    bbb.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            document.querySelector('.right-top div.active').classList.remove('active');
+            item.classList.add('active');
+        });
+    });
+</script>
 </html>
